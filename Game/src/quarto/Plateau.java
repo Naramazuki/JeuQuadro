@@ -208,7 +208,7 @@ public class Plateau {
     } 
     /**
      * deroulement de la partie 
-     * @throws IOException*/
+     * @throws IOException */
     public static void partie() throws IOException{
         Game jeu= new Game();
         System.out.println("Joueur 1 donnez votre prénom");
