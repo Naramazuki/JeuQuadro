@@ -22,11 +22,13 @@ public class JoueurOrdi implements JoueurAI{
     @Override
     public int[] getCoup(Game partie) {
         int[] coord=new int[2];
+        Pieces[][] tab=partie.getBoard();
         for (int j=0;j<4;j++){
             for (int i=0;i<4;i++){
-                if (partie.Plateau[i][j]!=null){
+                if (tab[i][j]==null){
                     coord[0]=i;
                     coord[1]=j;
+                    return coord;
                 }
             }
         }
@@ -34,7 +36,7 @@ public class JoueurOrdi implements JoueurAI{
     }
 
     @Override
-    public Piece getNext(Game partie) {
+    public Pieces getNext(Game partie) {
         return partie.PiecesDispo.get(0);
     }
 

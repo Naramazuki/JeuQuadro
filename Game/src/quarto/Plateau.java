@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.print.attribute.standard.JobOriginatingUserName;
+
 
 
 public class Plateau {
@@ -15,15 +17,17 @@ public class Plateau {
     public static int menu() throws IOException{
         int menu=0;
         while(menu!=4){
-            System.out.println("Menu :\n1 Jouer\n2 Niveau de difficulté\n3 regles du jeu\n4 fermer le jeu");
+            System.out.flush();
+            System.out.println("Menu :\n1 Jouer contre un humain\n2 jouer contre un bot Bot\n3 regles du jeu\n4 fermer le jeu");
             Scanner sc= new Scanner(System.in);
             menu=sc.nextInt();
             switch (menu) {
                 case 1:
-                    partie();
+                    partie(true);
                     break;
             
                 case 2:
+                    partie(false);
                     menu=menu();
 
                     break;
@@ -209,34 +213,125 @@ public class Plateau {
 
     public final static void clearConsole()  
     {  
-    try  
-        {  
-        final String os = System.getProperty("os.name");  
-        if (os.contains("Windows"))  
-            {  
-                Runtime.getRuntime().exec("cls");  
-            }  
-        else  
-            {  
-                Runtime.getRuntime().exec("clear");  
-            }  
-        }  
-    catch (final Exception e)  
-    {  
-    e.printStackTrace();  
-    }  
+    
     }  
 
     /**
      * deroulement de la partie 
      * @throws IOException */
-    public static void partie() throws IOException{
+    public static void partie(Boolean hum) throws IOException{
         Game jeu= new Game();
         System.out.println("Joueur 1 donnez votre prénom");
         Scanner sc=new Scanner(System.in);
         JoueurHumain j1 =new JoueurHumain(sc.next());
-        System.out.println("Joueur 2 donnez votre prénom");
+        
 
+                                                
+        Random rd= new Random();
+        int rnd=rd.nextInt(2);
+        int numeropiece;
+        int i;
+        int j;
+        Pieces[][] lp= jeu.getBoard();
+        if(!hum){
+            System.out.println("donner nom ordinateur: ");
+            JoueurOrdi j2 =new JoueurOrdi(sc.next());
+            Joueur[] tab = new Joueur[2];
+            tab[0]=j1;
+            tab[1]=j2;   
+            jeu.setIndexJoueur(rnd);
+            jeu.setJoueurs(tab);
+            
+           
+            
+            
+                jeu.JoueurCourant=jeu.Gamers[rnd];
+                System.out.println(jeu.getJoueurCourant().getNom()+" commence");
+                while(jeu.isWin()==0 && !jeu.getRestantes().isEmpty()){
+                    
+                    for (Pieces p : jeu.getRestantes()) {
+                        System.out.print(p.toString());
+                        System.out.print(" ");
+                    }
+                    System.out.println("");
+                    System.out.println("L'autre joueur choisi la pièce");
+                    System.out.println("choisi entre 0 et "+(jeu.getRestantes().size()-1));
+                    if(jeu.getJoueurCourant()==j2){
+                        numeropiece=sc.nextInt();
+                        while(numeropiece<0 && numeropiece>jeu.getRestantes().size()){
+                            System.out.println("choisi entre 0 et "+(jeu.getRestantes().size()-1));
+                            numeropiece=sc.nextInt();
+                        }
+                        jeu.setCourante(jeu.getRestantes().get(numeropiece));
+                        
+                    }
+                    else{
+
+                       jeu.setCourante(j2.getNext(jeu));
+                    }
+                    
+                    
+                    // choix de la piece parmis les pieces restantes
+                    
+                    System.out.println("Joues la pièces: "+jeu.getCourante().toString());
+                    clearConsole();
+                    Plateau.affichage(jeu.getBoard());  
+                    if(jeu.getJoueurCourant()==j2){
+                        System.out.println("le bot choisi ses positions");
+                        int[] tab2=j2.getCoup(jeu);
+                       
+                        
+                        jeu.joueCourante(tab2[0], tab2[1]);
+                    }
+                    else{
+
+                        System.out.println("entrer une position disponible dans le plateau");     
+                        i=sc.nextInt();
+                        j=sc.nextInt();
+                        while(i<0 && i>3 && j<0 && j>3 && lp[i][j]!=null){
+                            System.out.println("entrer une position disponible dans le plateau");     
+                            i=sc.nextInt();
+                            j=sc.nextInt();
+    
+                        } 
+                        jeu.joueCourante(i, j);
+                    
+                    }
+                    
+                    
+                    
+                    jeu.PiecesDispo.remove(jeu.getCourante()); 
+                    // piece entrée dans la position demandée
+                    clearConsole();
+    
+                    Plateau.affichage(jeu.getBoard()); 
+                    // selection de la pièce  
+                    if(jeu.isWin()!=0){
+                        System.out.println("le Joueur "+jeu.JoueurCourant.getNom()+" a gagné");
+                        System.exit(1);
+                        sc.close();
+    
+    
+                    }
+    
+                    jeu.switchJoueur();
+                        
+                    
+                }
+            }    
+            
+                if(jeu.getRestantes().isEmpty()){
+                    System.out.println("Egalité");
+                    System.exit(3);
+                    sc.close();
+    
+                }
+    
+            
+        
+        else if(hum==true){
+
+        System.out.println("Joueur 2 donnez votre prénom");
         JoueurHumain j2 =new JoueurHumain(sc.next());
         Joueur[] tab = new Joueur[2];
         tab[0]=j1;
@@ -244,16 +339,9 @@ public class Plateau {
         jeu.setIndexJoueur(1);
         jeu.setJoueurs(tab);
         
-        // fin creation des joueurs                                        
-        Random rd= new Random();
-        int rnd=rd.nextInt(2);
-        int numeropiece;
-        int i;
-        int j;
-        Pieces[][] lp= jeu.getBoard();
         
-        System.out.println("rnd= "+rnd);
-        if(rnd==1){
+        
+    
             jeu.JoueurCourant=jeu.Gamers[rnd];
             System.out.println(jeu.getJoueurCourant().getNom()+" commence");
             while(jeu.isWin()==0 && !jeu.getRestantes().isEmpty()){
@@ -306,62 +394,9 @@ public class Plateau {
                 
             }
         }    
-        if(rnd==0){
-            jeu.JoueurCourant=jeu.Gamers[rnd];
-            System.out.println(jeu.getJoueurCourant().getNom()+" commence");
-            while(jeu.isWin()==0 && !jeu.getRestantes().isEmpty()){
-                
-                for (Pieces p : jeu.getRestantes()) {
-                    System.out.print(p.toString());
-                    System.out.print(" ");
-                }
-                System.out.println("");
-                System.out.println("L'autre joueur choisi la pièce");
-                System.out.println("choisi entre 0 et "+(jeu.getRestantes().size()-1));
-                numeropiece=sc.nextInt();
-                while(numeropiece<0 || numeropiece>jeu.getRestantes().size()-1){
-                    System.out.println("choisi entre 0 et "+(jeu.getRestantes().size()-1));
-                    numeropiece=sc.nextInt();
-                }
-                jeu.setCourante(jeu.getRestantes().get(numeropiece));
-                
-                System.out.println("Joues la pièces: "+jeu.getCourante().toString());
-                clearConsole();
-
-                Plateau.affichage(jeu.getBoard());  
-                System.out.println("entrer une position disponible dans le plateau");     
-                i=sc.nextInt();
-                j=sc.nextInt();
-                while(i<0 || i>3 || j<0 || j>3 || lp[i][j]!=null){
-                    System.out.println("entrer une position disponible dans le plateau");     
-                    i=sc.nextInt();
-                    j=sc.nextInt();
-
-                } 
-                jeu.PiecesDispo.remove(jeu.getCourante()); 
-                jeu.joueCourante(i, j);
-                clearConsole();
-                Plateau.affichage(jeu.getBoard()); 
-                
-                // selection de la pièce
-                if(jeu.isWin()!=0){
-                    System.out.println("le Joueur "+jeu.JoueurCourant.getNom()+" a gagné");
-                    System.exit(2);
-                    sc.close();
-
-                }  
-                
-                jeu.switchJoueur();
-            }  
-            if(jeu.getRestantes().isEmpty()){
-                System.out.println("Egalité");
-                System.exit(3);
-                sc.close();
-
-            }
-
-        }   
-    }
+          
+        } 
+    
 
     public static void main(String[] args) throws IOException  {
     
