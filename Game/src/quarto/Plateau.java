@@ -254,7 +254,8 @@ public class Plateau {
         
         System.out.println("rnd= "+rnd);
         if(rnd==1){
-            System.out.println("joueur 1 commence");
+            jeu.JoueurCourant=jeu.Gamers[rnd];
+            System.out.println(jeu.getJoueurCourant().getNom()+" commence");
             while(jeu.isWin()==0 && !jeu.getRestantes().isEmpty()){
                 
                 for (Pieces p : jeu.getRestantes()) {
@@ -263,10 +264,10 @@ public class Plateau {
                 }
                 System.out.println("");
                 System.out.println("L'autre joueur choisi la pièce");
-                System.out.println("choisi entre 0 et "+jeu.getRestantes().size());
+                System.out.println("choisi entre 0 et "+(jeu.getRestantes().size()-1));
                 numeropiece=sc.nextInt();
                 while(numeropiece<0 && numeropiece>jeu.getRestantes().size()){
-                    System.out.println("choisi entre 0 et "+jeu.getRestantes().size());
+                    System.out.println("choisi entre 0 et "+(jeu.getRestantes().size()-1));
                     numeropiece=sc.nextInt();
                 }
                 jeu.setCourante(jeu.getRestantes().get(numeropiece));
@@ -306,7 +307,8 @@ public class Plateau {
             }
         }    
         if(rnd==0){
-            System.out.println("joueur 2 commence");
+            jeu.JoueurCourant=jeu.Gamers[rnd];
+            System.out.println(jeu.getJoueurCourant().getNom()+" commence");
             while(jeu.isWin()==0 && !jeu.getRestantes().isEmpty()){
                 
                 for (Pieces p : jeu.getRestantes()) {
