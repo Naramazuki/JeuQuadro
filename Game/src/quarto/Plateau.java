@@ -206,6 +206,27 @@ public class Plateau {
    
     
     } 
+
+    public final static void clearConsole()  
+    {  
+    try  
+        {  
+        final String os = System.getProperty("os.name");  
+        if (os.contains("Windows"))  
+            {  
+                Runtime.getRuntime().exec("cls");  
+            }  
+        else  
+            {  
+                Runtime.getRuntime().exec("clear");  
+            }  
+        }  
+    catch (final Exception e)  
+    {  
+    e.printStackTrace();  
+    }  
+    }  
+
     /**
      * deroulement de la partie 
      * @throws IOException */
@@ -225,13 +246,13 @@ public class Plateau {
         
         // fin creation des joueurs                                        
         Random rd= new Random();
-        int rnd=rd.nextInt(1);
+        int rnd=rd.nextInt(2);
         int numeropiece;
         int i;
         int j;
         Pieces[][] lp= jeu.getBoard();
         
-        
+        System.out.println("rnd= "+rnd);
         if(rnd==1){
             System.out.println("joueur 1 commence");
             while(jeu.isWin()==0 && !jeu.getRestantes().isEmpty()){
@@ -249,10 +270,10 @@ public class Plateau {
                     numeropiece=sc.nextInt();
                 }
                 jeu.setCourante(jeu.getRestantes().get(numeropiece));
+                // choix de la piece parmis les pieces restantes
                 
                 System.out.println("Joues la pièces: "+jeu.getCourante().toString());
-                //Runtime.getRuntime().exec("clear");
-
+                clearConsole();
                 Plateau.affichage(jeu.getBoard());  
                 System.out.println("entrer une position disponible dans le plateau");     
                     i=sc.nextInt();
@@ -263,10 +284,11 @@ public class Plateau {
                     j=sc.nextInt();
 
                 } 
+                
                 jeu.joueCourante(i, j);
                 jeu.PiecesDispo.remove(jeu.getCourante()); 
-                
-                //Runtime.getRuntime().exec("clear");
+                // piece entrée dans la position demandée
+                clearConsole();
 
                 Plateau.affichage(jeu.getBoard()); 
                 // selection de la pièce  
@@ -302,7 +324,7 @@ public class Plateau {
                 jeu.setCourante(jeu.getRestantes().get(numeropiece));
                 
                 System.out.println("Joues la pièces: "+jeu.getCourante().toString());
-                //Runtime.getRuntime().exec("clear");
+                clearConsole();
 
                 Plateau.affichage(jeu.getBoard());  
                 System.out.println("entrer une position disponible dans le plateau");     
@@ -316,7 +338,7 @@ public class Plateau {
                 } 
                 jeu.PiecesDispo.remove(jeu.getCourante()); 
                 jeu.joueCourante(i, j);
-               // Runtime.getRuntime().exec("clear");
+                clearConsole();
                 Plateau.affichage(jeu.getBoard()); 
                 
                 // selection de la pièce
