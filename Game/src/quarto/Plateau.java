@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
-import javax.print.attribute.standard.JobOriginatingUserName;
-
 
 
 public class Plateau {
@@ -18,7 +16,7 @@ public class Plateau {
         int menu=0;
         while(menu!=4){
             System.out.flush();
-            System.out.println("Menu :\n1 Jouer contre un humain\n2 jouer contre un bot Bot\n3 regles du jeu\n4 fermer le jeu");
+            System.out.println("Menu :\n1 Jouer contre un humain\n2 jouer contre un bot\n3 regles du jeu\n4 fermer le jeu");
             Scanner sc= new Scanner(System.in);
             menu=sc.nextInt();
             switch (menu) {
@@ -242,8 +240,7 @@ public class Plateau {
                 System.out.println("Donner niveau du bot: 1,2 ");
                 level=sc.nextInt();
             }
-            j2.setLevel(level=sc.nextInt());
-            System.out.println("efgh"+j2.getLevel());
+            j2.setLevel(level);
             Joueur[] tab = new Joueur[2];
             tab[0]=j1;
             tab[1]=j2;   
