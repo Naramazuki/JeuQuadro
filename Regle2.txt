@@ -4,4 +4,4 @@ comme la taille, la couleur, plein, non plein
 la partie se deroule ainsi un joueur va placer une piece qui 
 aura ete choisie au prealable par son adversaire
 il devra apres avoir place sa piece choisir celle de son adversaire
-s'il n'y a pas plus de pièces et pas de gagnant on a égalite
+s'il n'y a pas plus de pieces et pas de gagnant on a egalite
