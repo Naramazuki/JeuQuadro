@@ -213,7 +213,7 @@ public class Plateau {
 
     public final static void clearConsole()  
     {  
-    
+        System.out.print("\033[H\033[2J");
     }  
 
     /**
@@ -236,6 +236,14 @@ public class Plateau {
         if(!hum){
             System.out.println("donner nom ordinateur: ");
             JoueurOrdi j2 =new JoueurOrdi(sc.next());
+            System.out.println("Donner niveau du bot: 1,2 ");
+            int level=sc.nextInt();
+            while(level<1 || level>2){
+                System.out.println("Donner niveau du bot: 1,2 ");
+                level=sc.nextInt();
+            }
+            j2.setLevel(level=sc.nextInt());
+            System.out.println("efgh"+j2.getLevel());
             Joueur[] tab = new Joueur[2];
             tab[0]=j1;
             tab[1]=j2;   
@@ -272,9 +280,9 @@ public class Plateau {
                     
                     
                     // choix de la piece parmis les pieces restantes
-                    
-                    System.out.println("Joues la pièces: "+jeu.getCourante().toString());
                     clearConsole();
+                    System.out.println("Joues la pièces: "+jeu.getCourante().toString());
+
                     Plateau.affichage(jeu.getBoard());  
                     if(jeu.getJoueurCourant()==j2){
                         System.out.println("le bot choisi ses positions");
@@ -288,7 +296,7 @@ public class Plateau {
                         System.out.println("entrer une position disponible dans le plateau");     
                         i=sc.nextInt();
                         j=sc.nextInt();
-                        while(i<0 && i>3 && j<0 && j>3 && lp[i][j]!=null){
+                        while(i<0 || i>3 || j<0 || j>3 || lp[i][j]!=null){
                             System.out.println("entrer une position disponible dans le plateau");     
                             i=sc.nextInt();
                             j=sc.nextInt();
@@ -360,14 +368,14 @@ public class Plateau {
                 }
                 jeu.setCourante(jeu.getRestantes().get(numeropiece));
                 // choix de la piece parmis les pieces restantes
-                
-                System.out.println("Joues la pièces: "+jeu.getCourante().toString());
                 clearConsole();
+                System.out.println("Joues la pièces: "+jeu.getCourante().toString());
+                
                 Plateau.affichage(jeu.getBoard());  
                 System.out.println("entrer une position disponible dans le plateau");     
                     i=sc.nextInt();
                     j=sc.nextInt();
-                while(i<0 && i>3 && j<0 && j>3 && lp[i][j]!=null){
+                while(i<0 || i>3 || j<0 || j>3 || lp[i][j]!=null){
                     System.out.println("entrer une position disponible dans le plateau");     
                     i=sc.nextInt();
                     j=sc.nextInt();
